@@ -1,0 +1,294 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+  
+  /* Hindi font support */
+  .hindi {
+    font-family: 'Noto Sans Devanagari', 'Inter', system-ui, sans-serif;
+  }
+  
+  /* Government accessibility standards */
+  * {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-600 focus:ring-offset-2;
+  }
+  
+  /* High contrast for government compliance */
+  .high-contrast {
+    @apply text-gray-900 bg-white border-gray-300;
+  }
+  
+  /* Custom scrollbar for government aesthetic */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+}
+
+@layer components {
+  /* Government button styles */
+  .btn-primary {
+    @apply bg-primary-800 hover:bg-primary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:ring-primary-500;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary-800 hover:bg-secondary-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:ring-secondary-500;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-primary-800 text-primary-800 hover:bg-primary-800 hover:text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:ring-primary-500;
+  }
+  
+  /* Government card styles */
+  .card {
+    @apply bg-white rounded-xl shadow-government border border-gray-200 p-6;
+  }
+  
+  .card-hover {
+    @apply card hover:shadow-government-lg transition-shadow duration-200;
+  }
+  
+  /* Priority indicators */
+  .priority-high {
+    @apply bg-alert-600 text-white;
+  }
+  
+  .priority-medium {
+    @apply bg-warning-600 text-white;
+  }
+  
+  .priority-low {
+    @apply bg-success-600 text-white;
+  }
+  
+  /* Status badges */
+  .status-pending {
+    @apply bg-warning-100 text-warning-800 border border-warning-200;
+  }
+  
+  .status-assigned {
+    @apply bg-primary-100 text-primary-800 border border-primary-200;
+  }
+  
+  .status-in-progress {
+    @apply bg-accent-100 text-accent-800 border border-accent-200;
+  }
+  
+  .status-resolved {
+    @apply bg-success-100 text-success-800 border border-success-200;
+  }
+  
+  .status-closed {
+    @apply bg-gray-100 text-gray-800 border border-gray-200;
+  }
+  
+  /* Government form styles */
+  .form-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200;
+  }
+  
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+  
+  /* Navigation styles */
+  .nav-link {
+    @apply text-gray-700 hover:text-primary-800 font-medium transition-colors duration-200;
+  }
+  
+  .nav-link-active {
+    @apply text-primary-800 font-semibold;
+  }
+  
+  /* Metric cards */
+  .metric-card {
+    @apply card text-center;
+  }
+  
+  .metric-value {
+    @apply text-3xl font-bold text-gray-900;
+  }
+  
+  .metric-label {
+    @apply text-sm text-gray-600 mt-1;
+  }
+  
+  /* Issue cards */
+  .issue-card {
+    @apply card-hover cursor-pointer;
+  }
+  
+  .issue-priority-score {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  
+  /* Map container */
+  .map-container {
+    @apply rounded-xl overflow-hidden shadow-government;
+  }
+  
+  /* Loading states */
+  .loading-skeleton {
+    @apply animate-pulse bg-gray-200 rounded;
+  }
+  
+  /* Toast notifications */
+  .toast {
+    @apply fixed top-4 right-4 z-50 max-w-sm w-full bg-white rounded-lg shadow-lg border border-gray-200 p-4;
+  }
+  
+  .toast-success {
+    @apply border-l-4 border-l-success-500;
+  }
+  
+  .toast-error {
+    @apply border-l-4 border-l-alert-500;
+  }
+  
+  .toast-warning {
+    @apply border-l-4 border-l-warning-500;
+  }
+  
+  .toast-info {
+    @apply border-l-4 border-l-primary-500;
+  }
+  
+  /* Hero section styles */
+  .hero-section {
+    @apply bg-gradient-to-br from-primary-800 via-primary-700 to-secondary-800 text-white py-20;
+  }
+  
+  .hero-title {
+    @apply text-5xl font-bold mb-6;
+  }
+  
+  .hero-subtitle {
+    @apply text-xl mb-8 opacity-90;
+  }
+  
+  .cta-button {
+    @apply bg-white text-primary-800 hover:bg-gray-100 font-semibold py-3 px-8 rounded-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  /* Status tracker */
+  .status-tracker {
+    @apply flex justify-between items-center my-8;
+  }
+  
+  .status-step {
+    @apply flex-1 text-center relative;
+  }
+  
+  .status-step:not(:last-child)::after {
+    content: '';
+    @apply absolute top-5 -right-1/2 w-full h-0.5 bg-gray-300 z-10;
+  }
+  
+  .status-step.active::after {
+    @apply bg-primary-600;
+  }
+  
+  .status-circle {
+    @apply w-10 h-10 rounded-full bg-gray-300 text-gray-700 flex items-center justify-center mx-auto mb-2 font-semibold relative z-20;
+  }
+  
+  .status-step.active .status-circle {
+    @apply bg-primary-600 text-white;
+  }
+  
+  .status-step.completed .status-circle {
+    @apply bg-success-600 text-white;
+  }
+  
+  /* Table styles */
+  .table {
+    @apply rounded-xl overflow-hidden shadow-government;
+  }
+  
+  .table thead th {
+    @apply bg-primary-800 text-white border-0 font-semibold;
+  }
+  
+  /* Footer */
+  .footer {
+    @apply bg-gray-800 text-white py-10 mt-12;
+  }
+  
+  .social-icons a {
+    @apply text-white text-2xl mx-2 transition-colors duration-300 hover:text-primary-400;
+  }
+  
+  /* Loading spinner */
+  .spinner {
+    @apply border-4 border-gray-200 border-t-primary-600 rounded-full w-10 h-10 animate-spin mx-auto my-5;
+  }
+}
+
+@layer utilities {
+  /* Government spacing utilities */
+  .gov-padding {
+    @apply p-6;
+  }
+  
+  .gov-margin {
+    @apply m-6;
+  }
+  
+  /* Text utilities for bilingual support */
+  .text-hindi {
+    @apply hindi;
+  }
+  
+  /* Accessibility utilities */
+  .sr-only {
+    @apply absolute w-px h-px p-0 -m-px overflow-hidden whitespace-nowrap border-0;
+  }
+  
+  /* Focus utilities for keyboard navigation */
+  .focus-visible {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-title {
+    @apply text-3xl;
+  }
+  
+  .status-tracker {
+    @apply flex-col;
+  }
+  
+  .status-step:not(:last-child)::after {
+    @apply hidden;
+  }
+  
+  .status-step {
+    @apply mb-5;
+  }
+}
