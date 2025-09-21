@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAdminAuth } from '../contexts/AdminAuthContext';
 import { 
   Menu, 
   X, 
@@ -9,11 +10,11 @@ import {
   Settings, 
   LogOut, 
   Globe,
-  Home,
   BarChart3,
   Users,
   FileText,
-  MapPin
+  Shield,
+  Building2
 } from 'lucide-react';
 
 const Navigation = () => {
@@ -21,7 +22,9 @@ const Navigation = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { language, changeLanguage, t } = useLanguage();
+  const { admin, logout, isSuperAdmin } = useAdminAuth();
 
   const isActive = (path) => {
     return location.pathname === path;
@@ -32,13 +35,17 @@ const Navigation = () => {
   };
 
   const navigationItems = [
-    { path: '/', label: 'nav.home', icon: Home },
     { path: '/dashboard', label: 'nav.dashboard', icon: BarChart3 },
     { path: '/issues', label: 'nav.issues', icon: FileText },
     { path: '/employees', label: 'nav.employees', icon: Users },
     { path: '/analytics', label: 'nav.analytics', icon: BarChart3 },
     { path: '/settings', label: 'nav.settings', icon: Settings }
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate('/admin-login');
+  };
 
   const notifications = [
     { id: 1, message: 'New high priority issue reported', time: '2 min ago', type: 'urgent' },
@@ -58,10 +65,10 @@ const Navigation = () => {
               </div>
               <div>
                 <h1 className="text-xl font-bold text-gray-900">
-                  {t('landing.title')}
+                  CivicSync Admin
                 </h1>
                 <p className="text-xs text-gray-500 hidden sm:block">
-                  Government of Jharkhand
+                  {admin?.department === 'super_admin' ? 'Super Admin Portal' : `${admin?.department?.replace('_', ' ').toUpperCase()} Department`}
                 </p>
               </div>
             </Link>
@@ -151,8 +158,8 @@ const Navigation = () => {
                   <User size={16} className="text-white" />
                 </div>
                 <div className="hidden sm:block text-left">
-                  <p className="text-sm font-medium text-gray-900">Admin User</p>
-                  <p className="text-xs text-gray-500">Super Admin</p>
+                  <p className="text-sm font-medium text-gray-900">{admin?.username}</p>
+                  <p className="text-xs text-gray-500">{admin?.role}</p>
                 </div>
               </button>
 
@@ -160,8 +167,8 @@ const Navigation = () => {
               {isProfileOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                   <div className="px-4 py-2 border-b border-gray-200">
-                    <p className="text-sm font-medium text-gray-900">Admin User</p>
-                    <p className="text-xs text-gray-500">admin@jharkhand.gov.in</p>
+                    <p className="text-sm font-medium text-gray-900">{admin?.username}</p>
+                    <p className="text-xs text-gray-500">{admin?.department?.replace('_', ' ')} Department</p>
                   </div>
                   <div className="py-1">
                     <Link
@@ -178,7 +185,10 @@ const Navigation = () => {
                       <Settings size={16} />
                       <span>{t('nav.settings')}</span>
                     </Link>
-                    <button className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full text-left">
+                    <button 
+                      onClick={handleLogout}
+                      className="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 w-full text-left"
+                    >
                       <LogOut size={16} />
                       <span>{t('nav.logout')}</span>
                     </button>

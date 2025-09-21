@@ -1,19 +1,17 @@
 import React, { useState } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { LanguageProvider } from './contexts/LanguageContext'
+import { AdminAuthProvider } from './contexts/AdminAuthContext'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
-import Home from './pages/Home'
+import ProtectedRoute from './components/ProtectedRoute'
+import IntroPage from './pages/IntroPage'
+import AdminLogin from './pages/AdminLogin'
 import Dashboard from './pages/Dashboard'
 import Issues from './pages/Issues'
 import Employees from './pages/Employees'
 import Analytics from './pages/Analytics'
 import Settings from './pages/Settings'
-import ReportIssue from './pages/ReportIssue'
-import TrackIssue from './pages/TrackIssue'
-import AdminDashboard from './pages/AdminDashboard'
-import About from './pages/About'
-import Contact from './pages/Contact'
 import Notification from './components/Notification'
 
 function App() {
@@ -26,32 +24,74 @@ function App() {
 
   return (
     <LanguageProvider>
-      <div className="App min-h-screen bg-gray-50">
-        <Navigation />
-        <main className="flex-1">
+      <AdminAuthProvider>
+        <div className="App min-h-screen bg-gray-50">
           <Routes>
-            <Route path="/" element={<Home showNotification={showNotification} />} />
-            <Route path="/dashboard" element={<Dashboard showNotification={showNotification} />} />
-            <Route path="/issues" element={<Issues showNotification={showNotification} />} />
-            <Route path="/employees" element={<Employees showNotification={showNotification} />} />
-            <Route path="/analytics" element={<Analytics showNotification={showNotification} />} />
-            <Route path="/settings" element={<Settings showNotification={showNotification} />} />
-            <Route path="/report" element={<ReportIssue showNotification={showNotification} />} />
-            <Route path="/track" element={<TrackIssue showNotification={showNotification} />} />
-            <Route path="/admin" element={<AdminDashboard showNotification={showNotification} />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact showNotification={showNotification} />} />
+            {/* Public Routes */}
+            <Route path="/" element={<IntroPage />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
+            
+            {/* Protected Admin Routes */}
+            <Route path="/dashboard" element={
+              <ProtectedRoute>
+                <Navigation />
+                <main className="flex-1">
+                  <Dashboard showNotification={showNotification} />
+                </main>
+                <Footer />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/issues" element={
+              <ProtectedRoute>
+                <Navigation />
+                <main className="flex-1">
+                  <Issues showNotification={showNotification} />
+                </main>
+                <Footer />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/employees" element={
+              <ProtectedRoute>
+                <Navigation />
+                <main className="flex-1">
+                  <Employees showNotification={showNotification} />
+                </main>
+                <Footer />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/analytics" element={
+              <ProtectedRoute>
+                <Navigation />
+                <main className="flex-1">
+                  <Analytics showNotification={showNotification} />
+                </main>
+                <Footer />
+              </ProtectedRoute>
+            } />
+            
+            <Route path="/settings" element={
+              <ProtectedRoute>
+                <Navigation />
+                <main className="flex-1">
+                  <Settings showNotification={showNotification} />
+                </main>
+                <Footer />
+              </ProtectedRoute>
+            } />
           </Routes>
-        </main>
-        <Footer />
-        {notification && (
-          <Notification 
-            message={notification.message} 
-            type={notification.type}
-            onClose={() => setNotification(null)}
-          />
-        )}
-      </div>
+          
+          {notification && (
+            <Notification 
+              message={notification.message} 
+              type={notification.type}
+              onClose={() => setNotification(null)}
+            />
+          )}
+        </div>
+      </AdminAuthProvider>
     </LanguageProvider>
   )
 }

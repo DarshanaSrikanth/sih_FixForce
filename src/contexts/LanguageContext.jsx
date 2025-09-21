@@ -246,18 +246,23 @@ const translations = {
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState('en');
   const [isRTL, setIsRTL] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0);
 
   useEffect(() => {
     // Load saved language preference
     const savedLanguage = localStorage.getItem('civicsync-language') || 'en';
+    console.log('LanguageContext: Loading saved language:', savedLanguage);
     setLanguage(savedLanguage);
     setIsRTL(savedLanguage === 'hi');
   }, []);
 
   const changeLanguage = (newLanguage) => {
+    console.log('LanguageContext: Changing language to', newLanguage);
     setLanguage(newLanguage);
     setIsRTL(newLanguage === 'hi');
     localStorage.setItem('civicsync-language', newLanguage);
+    setForceUpdate(prev => prev + 1); // Force re-render
+    console.log('LanguageContext: Language changed successfully');
   };
 
   const t = (key, fallback = key) => {
@@ -269,7 +274,8 @@ export const LanguageProvider = ({ children }) => {
     isRTL,
     changeLanguage,
     t,
-    translations: translations[language] || {}
+    translations: translations[language] || {},
+    forceUpdate
   };
 
   return (

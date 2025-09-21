@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useAdminAuth } from '../contexts/AdminAuthContext';
 import { mockIssues, mockStats } from '../data/mockData';
 import { 
   AlertTriangle, 
@@ -18,6 +19,7 @@ import {
 
 const Dashboard = ({ showNotification }) => {
   const { language, t } = useLanguage();
+  const { admin, isSuperAdmin } = useAdminAuth();
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -25,7 +27,8 @@ const Dashboard = ({ showNotification }) => {
     const matchesFilter = selectedFilter === 'all' || issue.status === selectedFilter;
     const matchesSearch = issue.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          issue.location.area.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && matchesSearch;
+    const matchesDepartment = isSuperAdmin() || issue.category === admin?.department;
+    return matchesFilter && matchesSearch && matchesDepartment;
   });
 
   const getPriorityColor = (score) => {
@@ -67,21 +70,29 @@ const Dashboard = ({ showNotification }) => {
   return (
     <div className="dashboard-page">
       {/* Dashboard Header */}
-      <div className="bg-white border-b border-gray-200 py-6">
+      <div className="bg-gradient-to-r from-primary-800 to-secondary-800 text-white py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900 text-hindi">
+              <h1 className="text-4xl font-bold text-white text-hindi mb-2">
                 {t('dashboard.title')}
               </h1>
-              <p className="text-gray-600 mt-1 text-hindi">
-                {t('dashboard.welcome')}, Admin User
+              <p className="text-primary-200 text-lg text-hindi">
+                {t('dashboard.welcome')}, {admin?.username}
               </p>
+              <div className="flex items-center space-x-2 mt-2">
+                <div className="w-2 h-2 bg-accent-400 rounded-full animate-pulse"></div>
+                <p className="text-sm text-primary-300">
+                  {isSuperAdmin() ? 'Super Admin Portal' : `${admin?.department?.replace('_', ' ').toUpperCase()} Department`}
+                </p>
+              </div>
             </div>
             <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <Activity size={16} />
-                <span>Last updated: 2 minutes ago</span>
+              <div className="bg-white/10 backdrop-blur-sm rounded-lg px-4 py-2 border border-white/20">
+                <div className="flex items-center space-x-2 text-sm text-white">
+                  <Activity size={16} />
+                  <span>Last updated: 2 minutes ago</span>
+                </div>
               </div>
             </div>
           </div>
@@ -90,74 +101,74 @@ const Dashboard = ({ showNotification }) => {
 
       {/* Key Metrics Cards */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <div className="metric-card">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 -mt-8">
+          <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <div className="metric-value text-alert-600">
+                <div className="text-3xl font-bold text-alert-600 mb-1">
                   {mockStats.highPriorityIssues}
                 </div>
-                <div className="metric-label text-hindi">
+                <div className="text-sm text-gray-600 text-hindi">
                   {t('dashboard.metrics.high_priority')}
                 </div>
               </div>
-              <div className="bg-alert-100 p-3 rounded-full">
-                <AlertTriangle size={24} className="text-alert-600" />
+              <div className="bg-gradient-to-br from-alert-100 to-alert-200 p-4 rounded-2xl">
+                <AlertTriangle size={28} className="text-alert-600" />
               </div>
             </div>
           </div>
 
-          <div className="metric-card">
+          <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <div className="metric-value text-warning-600">
+                <div className="text-3xl font-bold text-warning-600 mb-1">
                   {mockStats.mediumPriorityIssues}
                 </div>
-                <div className="metric-label text-hindi">
+                <div className="text-sm text-gray-600 text-hindi">
                   {t('dashboard.metrics.medium_priority')}
                 </div>
               </div>
-              <div className="bg-warning-100 p-3 rounded-full">
-                <Clock size={24} className="text-warning-600" />
+              <div className="bg-gradient-to-br from-warning-100 to-warning-200 p-4 rounded-2xl">
+                <Clock size={28} className="text-warning-600" />
               </div>
             </div>
           </div>
 
-          <div className="metric-card">
+          <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <div className="metric-value text-success-600">
+                <div className="text-3xl font-bold text-success-600 mb-1">
                   {mockStats.lowPriorityIssues}
                 </div>
-                <div className="metric-label text-hindi">
+                <div className="text-sm text-gray-600 text-hindi">
                   {t('dashboard.metrics.low_priority')}
                 </div>
               </div>
-              <div className="bg-success-100 p-3 rounded-full">
-                <CheckCircle size={24} className="text-success-600" />
+              <div className="bg-gradient-to-br from-success-100 to-success-200 p-4 rounded-2xl">
+                <CheckCircle size={28} className="text-success-600" />
               </div>
             </div>
           </div>
 
-          <div className="metric-card">
+          <div className="bg-white rounded-2xl shadow-xl p-6 border border-gray-100 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
             <div className="flex items-center justify-between">
               <div>
-                <div className="metric-value text-primary-600">
+                <div className="text-3xl font-bold text-primary-600 mb-1">
                   {mockStats.resolvedToday}
                 </div>
-                <div className="metric-label text-hindi">
+                <div className="text-sm text-gray-600 text-hindi">
                   {t('dashboard.metrics.resolved_today')}
                 </div>
               </div>
-              <div className="bg-primary-100 p-3 rounded-full">
-                <TrendingUp size={24} className="text-primary-600" />
+              <div className="bg-gradient-to-br from-primary-100 to-primary-200 p-4 rounded-2xl">
+                <TrendingUp size={28} className="text-primary-600" />
               </div>
             </div>
           </div>
         </div>
 
         {/* Filters and Search */}
-        <div className="bg-white rounded-xl shadow-government p-6 mb-8">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 mb-8">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex flex-col sm:flex-row gap-4">
               <div className="relative">
@@ -193,7 +204,7 @@ const Dashboard = ({ showNotification }) => {
         </div>
 
         {/* Priority-Based Issue List */}
-        <div className="bg-white rounded-xl shadow-government">
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
           <div className="p-6 border-b border-gray-200">
             <h2 className="text-xl font-semibold text-gray-900 text-hindi">
               {t('dashboard.issues.title')}
@@ -203,9 +214,9 @@ const Dashboard = ({ showNotification }) => {
             </p>
           </div>
 
-          <div className="divide-y divide-gray-200">
+          <div className="divide-y divide-gray-100">
             {filteredIssues.map((issue) => (
-              <div key={issue.id} className="p-6 hover:bg-gray-50 transition-colors duration-200">
+              <div key={issue.id} className="p-6 hover:bg-gradient-to-r hover:from-primary-50 hover:to-secondary-50 transition-all duration-300 border-l-4 border-transparent hover:border-primary-400">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
@@ -254,14 +265,14 @@ const Dashboard = ({ showNotification }) => {
                   <div className="flex flex-col space-y-2 ml-6">
                     <button
                       onClick={() => handleAssignWorkers(issue.id)}
-                      className="flex items-center space-x-2 px-4 py-2 bg-primary-800 text-white rounded-lg hover:bg-primary-700 transition-colors duration-200 text-sm font-medium"
+                      className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-xl hover:from-primary-700 hover:to-primary-800 transition-all duration-300 text-sm font-medium shadow-lg hover:shadow-xl transform hover:scale-105"
                     >
                       <UserPlus size={16} />
                       <span>{t('dashboard.issues.assign_workers')}</span>
                     </button>
                     <button
                       onClick={() => handleViewDetails(issue.id)}
-                      className="flex items-center space-x-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200 text-sm font-medium"
+                      className="flex items-center space-x-2 px-4 py-2 border-2 border-gray-200 text-gray-700 rounded-xl hover:border-primary-300 hover:bg-primary-50 transition-all duration-300 text-sm font-medium"
                     >
                       <Eye size={16} />
                       <span>{t('dashboard.issues.view_details')}</span>
