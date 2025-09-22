@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+
 import {
   View,
   Text,
@@ -9,10 +10,13 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import LanguageToggle from '../components/LanguageToggle';
+import { useLanguage } from '../LanguageContext';
 
 const { width, height } = Dimensions.get('window');
 
 const HomeScreen = ({ onNavigate }) => {
+  const { t } = useLanguage();
   // Animation references
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
@@ -69,6 +73,9 @@ const HomeScreen = ({ onNavigate }) => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', padding: 12 }}>
+        <LanguageToggle />
+      </View>
       <View style={styles.content}>
         
         {/* Main Logo and Branding Section */}
@@ -98,12 +105,8 @@ const HomeScreen = ({ onNavigate }) => {
           </View>
           
           {/* App Title */}
-          <Text style={styles.appTitle}>CivicSync</Text>
-          
-          {/* Tagline */}
-          <Text style={styles.appSubtitle}>
-            Empowering Citizens to Build Better Communities
-          </Text>
+            <Text style={styles.appTitle}>{t('app_title')}</Text>
+            <Text style={styles.appSubtitle}>{t('tagline')}</Text>
         </Animated.View>
 
         {/* Description Section */}
@@ -116,10 +119,7 @@ const HomeScreen = ({ onNavigate }) => {
             },
           ]}
         >
-          <Text style={styles.appDescription}>
-            Report civic issues instantly with photo evidence and GPS tracking. 
-            Track resolution progress and help make your city a better place to live.
-          </Text>
+            <Text style={styles.appDescription}>{t('description')}</Text>
         </Animated.View>
 
         {/* Feature Highlights Section */}
@@ -134,8 +134,8 @@ const HomeScreen = ({ onNavigate }) => {
             <View style={styles.featureIcon}>
               <Ionicons name="camera" size={28} color="#4A90E2" />
             </View>
-            <Text style={styles.featureText}>Photo Reporting</Text>
-            <Text style={styles.featureSubtext}>Instant capture</Text>
+              <Text style={styles.featureText}>{t('feature_photo')}</Text>
+              <Text style={styles.featureSubtext}>{t('feature_photo_sub')}</Text>
           </View>
           
           {/* GPS Tracking Feature */}
@@ -143,8 +143,8 @@ const HomeScreen = ({ onNavigate }) => {
             <View style={styles.featureIcon}>
               <Ionicons name="location" size={28} color="#4A90E2" />
             </View>
-            <Text style={styles.featureText}>GPS Tracking</Text>
-            <Text style={styles.featureSubtext}>Precise location</Text>
+              <Text style={styles.featureText}>{t('feature_gps')}</Text>
+              <Text style={styles.featureSubtext}>{t('feature_gps_sub')}</Text>
           </View>
           
           {/* Real-time Updates Feature */}
@@ -152,8 +152,8 @@ const HomeScreen = ({ onNavigate }) => {
             <View style={styles.featureIcon}>
               <Ionicons name="notifications" size={28} color="#4A90E2" />
             </View>
-            <Text style={styles.featureText}>Live Updates</Text>
-            <Text style={styles.featureSubtext}>Real-time status</Text>
+              <Text style={styles.featureText}>{t('feature_live')}</Text>
+              <Text style={styles.featureSubtext}>{t('feature_live_sub')}</Text>
           </View>
         </Animated.View>
 
@@ -172,16 +172,14 @@ const HomeScreen = ({ onNavigate }) => {
             onPress={() => onNavigate('dashboard')}
             activeOpacity={0.8}
           >
-            <Text style={styles.buttonText}>Get Started</Text>
+              <Text style={styles.buttonText}>{t('get_started')}</Text>
             <View style={styles.buttonIconContainer}>
               <Ionicons name="arrow-forward" size={20} color="white" />
             </View>
           </TouchableOpacity>
           
           {/* Secondary info text */}
-          <Text style={styles.startButtonSubtext}>
-            Join thousands of citizens making a difference
-          </Text>
+            <Text style={styles.startButtonSubtext}>{t('join_citizens')}</Text>
         </Animated.View>
 
         {/* Bottom decoration */}

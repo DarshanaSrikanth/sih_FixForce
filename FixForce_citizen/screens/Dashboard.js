@@ -11,6 +11,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import LanguageToggle from '../components/LanguageToggle';
+import { useLanguage } from '../LanguageContext';
 
 const { width } = Dimensions.get('window');
 
@@ -49,6 +51,7 @@ const mockReports = [
 ];
 
 const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
+  const { t } = useLanguage();
   // Use mock data if no real reports exist (for demo purposes)
   const displayReports = reports.length > 0 ? reports : mockReports;
   
@@ -62,9 +65,9 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
   useEffect(() => {
     // Set appropriate greeting based on time
     const hour = new Date().getHours();
-    if (hour < 12) setGreeting('Good Morning');
-    else if (hour < 17) setGreeting('Good Afternoon');
-    else setGreeting('Good Evening');
+  if (hour < 12) setGreeting(t('good_morning'));
+  else if (hour < 17) setGreeting(t('good_afternoon'));
+  else setGreeting(t('good_evening'));
 
     // Entrance animations
     Animated.parallel([
@@ -134,17 +137,20 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <View style={styles.headerLeft}>
-            <Text style={styles.headerTitle}>Dashboard</Text>
+            <Text style={styles.headerTitle}>{t('dashboard')}</Text>
             <Text style={styles.headerSubtitle}>
-              {greeting}, Citizen! 👋
+              {greeting}, {t('citizen')}! 👋
             </Text>
           </View>
-          <TouchableOpacity 
-            style={styles.logoutButton}
-            onPress={() => onNavigate('home')}
-          >
-            <Ionicons name="log-out-outline" size={24} color="#4A90E2" />
-          </TouchableOpacity>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            <LanguageToggle />
+            <TouchableOpacity 
+              style={styles.logoutButton}
+              onPress={() => onNavigate('home')}
+            >
+              <Ionicons name="log-out-outline" size={24} color="#4A90E2" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
 
@@ -168,8 +174,8 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
               <Ionicons name="document-text" size={24} color="#1976D2" />
             </View>
             <Text style={styles.statNumber}>{stats.total}</Text>
-            <Text style={styles.statLabel}>Total Reports</Text>
-            <Text style={styles.statSubLabel}>All time</Text>
+            <Text style={styles.statLabel}>{t('total_reports')}</Text>
+            <Text style={styles.statSubLabel}>{t('all_time')}</Text>
           </View>
           
           {/* Pending Reports Card */}
@@ -178,8 +184,8 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
               <Ionicons name="time" size={24} color="#F57C00" />
             </View>
             <Text style={styles.statNumber}>{stats.pending}</Text>
-            <Text style={styles.statLabel}>Pending</Text>
-            <Text style={styles.statSubLabel}>Awaiting review</Text>
+            <Text style={styles.statLabel}>{t('pending')}</Text>
+            <Text style={styles.statSubLabel}>{t('awaiting_review')}</Text>
           </View>
           
           {/* Resolved Reports Card */}
@@ -188,8 +194,8 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
               <Ionicons name="checkmark-circle" size={24} color="#388E3C" />
             </View>
             <Text style={styles.statNumber}>{stats.completed}</Text>
-            <Text style={styles.statLabel}>Resolved</Text>
-            <Text style={styles.statSubLabel}>Issues fixed</Text>
+            <Text style={styles.statLabel}>{t('resolved')}</Text>
+            <Text style={styles.statSubLabel}>{t('issues_fixed')}</Text>
           </View>
         </Animated.View>
 
@@ -205,9 +211,9 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
                 <Ionicons name="camera" size={32} color="white" />
               </View>
               <View style={styles.reportButtonTextContainer}>
-                <Text style={styles.reportButtonText}>Report New Issue</Text>
+                <Text style={styles.reportButtonText}>{t('report_new_issue')}</Text>
                 <Text style={styles.reportButtonSubtext}>
-                  Capture photo and submit instantly
+                  {t('capture_and_submit')}
                 </Text>
               </View>
               <Ionicons name="arrow-forward" size={20} color="rgba(255,255,255,0.8)" />
@@ -218,9 +224,9 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
         {/* Recent Reports Section */}
         <View style={styles.reportsSection}>
           <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Your Recent Reports</Text>
+            <Text style={styles.sectionTitle}>{t('your_recent_reports')}</Text>
             <Text style={styles.sectionSubtitle}>
-              {displayReports.length} {displayReports.length === 1 ? 'issue' : 'issues'} reported
+              {displayReports.length} {displayReports.length === 1 ? t('issue') : t('issues')} {t('reported')}
             </Text>
           </View>
           
@@ -228,9 +234,9 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
             // Empty state
             <View style={styles.emptyState}>
               <Ionicons name="document-outline" size={48} color="#BDC3C7" />
-              <Text style={styles.emptyStateTitle}>No Reports Yet</Text>
+              <Text style={styles.emptyStateTitle}>{t('no_reports_yet')}</Text>
               <Text style={styles.emptyStateText}>
-                Tap "Report New Issue" above to submit your first civic issue report
+                {t('no_reports_hint')}
               </Text>
             </View>
           ) : (
@@ -313,7 +319,7 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
                     </View>
                     
                     <View style={styles.viewButton}>
-                      <Text style={styles.viewButtonText}>View Details</Text>
+                      <Text style={styles.viewButtonText}>{t('view_details')}</Text>
                       <Ionicons name="arrow-forward" size={12} color="#4A90E2" />
                     </View>
                   </View>
