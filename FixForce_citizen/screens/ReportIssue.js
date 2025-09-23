@@ -84,7 +84,8 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
       setDescription(
         description +
         (description ? ' ' : '') +
-        "Broken pipe flooding the road, urgent attention required."
+        t('voice_to_text_example')
+        // "Broken pipe flooding the road, urgent attention required."
       );
       setVoiceActive(false);
       descriptionRef.current && descriptionRef.current.focus();
@@ -299,7 +300,7 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
         <Animated.View style={styles.successCheckWrapper}>
           <Ionicons name="checkmark-circle" size={64} color="#4A90E2" style={{ opacity: 0.93 }} />
         </Animated.View>
-        <Text style={styles.successText}>Issue Submitted Successfully!</Text>
+        <Text style={styles.successText}>{t('success')}</Text>
       </View>
     ) : null;
 

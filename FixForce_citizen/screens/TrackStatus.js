@@ -1,3 +1,5 @@
+// Capitalize first letter utility
+const capitalize = (str) => str && str.length > 0 ? str.charAt(0).toUpperCase() + str.slice(1) : str;
 import React, { useRef, useEffect, useState } from 'react';
 import {
   View,
@@ -188,7 +190,7 @@ const TrackStatus = ({
               />
             </View>
             <View style={styles.issueInfo}>
-              <Text style={styles.issueType}>{t(selectedReport.type?.toLowerCase().replace(/ /g, '_')) || selectedReport.type}</Text>
+              <Text style={styles.issueType}>{capitalize(t(selectedReport.type?.toLowerCase().replace(/ /g, '_')) || selectedReport.type)}</Text>
               <View style={styles.issueMetaRow}>
                 <View style={[styles.statusBadge, {backgroundColor: mainColor}]}>
                   <Text style={styles.statusBadgeText}>{t('status_' + selectedReport.status?.toLowerCase().replace(/ /g, '_')) || selectedReport.status}</Text>
@@ -208,7 +210,7 @@ const TrackStatus = ({
             </View>
           </View>
           <Text style={styles.issueDescription}>
-            {selectedReport.description}
+            {t(selectedReport.description)}
           </Text>
           <View style={styles.locationRow}>
             <Ionicons name="location" size={16} color="#4A90E2"/>

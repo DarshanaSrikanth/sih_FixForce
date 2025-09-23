@@ -1,3 +1,5 @@
+// Capitalize first letter utility
+const capitalize = (str) => str && str.length > 0 ? str.charAt(0).toUpperCase() + str.slice(1) : str;
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
@@ -20,30 +22,30 @@ const { width } = Dimensions.get('window');
 const mockReports = [
   {
     id: 1,
-    type: 'Pothole',
-    description: 'Large pothole on Main Street causing traffic issues and vehicle damage',
-    status: 'In Progress',
-    priority: 'High',
+    type: 'pothole',
+    description: 'desc_pothole',
+    status: 'in_progress',
+    priority: 'high',
     date: '2025-09-20',
     location: 'Main Street, T. Nagar, Chennai',
     assignedTo: 'Road Maintenance Team A',
   },
   {
     id: 2,
-    type: 'Streetlight',
-    description: 'Broken streetlight near bus stop creating safety concerns at night',
-    status: 'Completed',
-    priority: 'Medium',
+    type: 'streetlight',
+    description: 'desc_streetlight',
+    status: 'completed',
+    priority: 'medium',
     date: '2025-09-18',
     location: 'Bus Stop, Anna Nagar, Chennai',
     assignedTo: 'Electrical Maintenance Team B',
   },
   {
     id: 3,
-    type: 'Trash',
-    description: 'Garbage overflow in residential area attracting pests and causing bad odor',
-    status: 'Pending',
-    priority: 'High',
+    type: 'trash',
+    description: 'desc_trash',
+    status: 'pending',
+    priority: 'high',
     date: '2025-09-21',
     location: 'Sector 15, Adyar, Chennai',
     assignedTo: 'Sanitation Team C',
@@ -54,7 +56,11 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
   const { t } = useLanguage();
   // Use mock data if no real reports exist (for demo purposes)
   const displayReports = reports.length > 0 ? reports : mockReports;
-  
+
+  // Capitalize each word utility
+  const capitalizeWords = (str) => str.replace(/\b\w/g, c => c.toUpperCase());
+  // const displayReports = reports;
+
   // Animation and state management
   const [refreshing, setRefreshing] = useState(false);
   const [greeting, setGreeting] = useState('');
@@ -96,29 +102,29 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
   // Utility functions for styling
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Completed': return '#4CAF50';
-      case 'In Progress': return '#FF9800';
-      case 'Pending': return '#F44336';
+      case 'completed': return '#4CAF50';
+      case 'in_progress': return '#FF9800';
+      case 'pending': return '#F44336';
       default: return '#757575';
     }
   };
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case 'High': return '#F44336';
-      case 'Medium': return '#FF9800';
-      case 'Low': return '#4CAF50';
+      case 'high': return '#F44336';
+      case 'medium': return '#FF9800';
+      case 'low': return '#4CAF50';
       default: return '#757575';
     }
   };
 
   const getTypeIcon = (type) => {
     switch (type) {
-      case 'Pothole': return 'car';
-      case 'Streetlight': return 'bulb';
-      case 'Trash': return 'trash';
-      case 'Water Issue': return 'water';
-      case 'Road Damage': return 'construct';
+      case 'pothole': return 'car';
+      case 'streetlight': return 'bulb';
+      case 'trash': return 'trash';
+      case 'water_issue': return 'water';
+      case 'road_damage': return 'construct';
       default: return 'alert-circle';
     }
   };
@@ -126,9 +132,9 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
   // Calculate statistics
   const stats = {
     total: displayReports.length,
-    pending: displayReports.filter(r => r.status === 'Pending').length,
-    inProgress: displayReports.filter(r => r.status === 'In Progress').length,
-    completed: displayReports.filter(r => r.status === 'Completed').length,
+    pending: displayReports.filter(r => r.status === 'pending').length,
+    inProgress: displayReports.filter(r => r.status === 'in_progress').length,
+    completed: displayReports.filter(r => r.status === 'completed').length,
   };
 
   return (
@@ -139,7 +145,7 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
           <View style={styles.headerLeft}>
             <Text style={styles.headerTitle}>{t('dashboard')}</Text>
             <Text style={styles.headerSubtitle}>
-              {greeting}, {t('citizen')}! 👋
+              {capitalizeWords(greeting)}, {capitalizeWords(t('citizen'))}! 👋
             </Text>
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -272,7 +278,7 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
                     </View>
                     
                     <View style={styles.reportInfo}>
-                      <Text style={styles.reportType}>{report.type}</Text>
+                      <Text style={styles.reportType}>{capitalize(t(report.type))}</Text>
                       <View style={styles.locationRow}>
                         <Ionicons name="location" size={12} color="#7F8C8D" />
                         <Text style={styles.reportLocation}>{report.location}</Text>
@@ -286,7 +292,7 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
                           { backgroundColor: getStatusColor(report.status) }
                         ]}
                       >
-                        <Text style={styles.statusText}>{report.status}</Text>
+                        <Text style={styles.statusText}>{t(report.status)}</Text>
                       </View>
                       <View 
                         style={[
@@ -300,7 +306,7 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
                             { color: getPriorityColor(report.priority) }
                           ]}
                         >
-                          {report.priority}
+                          {t(report.priority)}
                         </Text>
                       </View>
                     </View>
@@ -308,7 +314,7 @@ const Dashboard = ({ onNavigate, reports = [], updateReportStatus }) => {
                   
                   {/* Report Description */}
                   <Text style={styles.reportDescription} numberOfLines={2}>
-                    {report.description}
+                    {report.description.startsWith('desc_') ? t(report.description) : report.description}
                   </Text>
                   
                   {/* Report Footer */}

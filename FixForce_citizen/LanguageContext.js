@@ -17,7 +17,13 @@ const translations = {
     get_started: 'Get Started',
     join_citizens: 'Join thousands of citizens making a difference',
 
-    // Dashboard
+  pothole: 'Pothole',
+  streetlight: 'Streetlight',
+  trash: 'Trash',
+  water_issue: 'Water Issue',
+  road_damage: 'Road Damage',
+  other: 'Other',
+  // Dashboard
     dashboard: 'Dashboard',
     greeting: 'Welcome',
     total_reports: 'Total Reports',
@@ -55,9 +61,14 @@ const translations = {
     step3_full: 'Step 3: Describe Issue',
     describe_placeholder: 'Describe the issue in detail...',
     listening: 'Listening...',
-    voice_to_text: 'Voice to Text',
+  voice_to_text: 'Voice to Text',
+  voice_to_text_placeholder: 'Speak or type your issue here...',
+  voice_to_text_example: 'Broken pipe flooding the street near my house',
     header: 'Report Civic Issue',
 
+    desc_pothole: "Large pothole on Main Street causing traffic issues and vehicle damage",
+    desc_streetlight: "Broken streetlight near bus stop creating safety concerns at night",
+    desc_trash: "Garbage overflow in residential area attracting pests and causing bad odor",
     // TrackStatus
     track_status: 'Track Status',
     track_issue_status: 'Track Issue Status',
@@ -89,7 +100,17 @@ const translations = {
     get_started: 'शुरू करें',
     join_citizens: 'हजारों नागरिकों के साथ बदलाव लाएं',
 
-    // Dashboard
+
+    desc_pothole: "मुख्य सड़क पर बड़ा गड्ढा, जिससे ट्रैफिक और वाहन क्षति हो रही है",
+    desc_streetlight: "बस स्टॉप के पास टूटी स्ट्रीटलाइट, जिससे रात में सुरक्षा की चिंता",
+    desc_trash: "आवासीय क्षेत्र में कचरा जमा, जिससे बदबू और कीट आ रहे हैं",
+  pothole: 'गड्ढा',
+  streetlight: 'स्ट्रीटलाइट',
+  trash: 'कचरा',
+  water_issue: 'पानी की समस्या',
+  road_damage: 'सड़क क्षति',
+  other: 'अन्य',
+  // Dashboard
     dashboard: 'डैशबोर्ड',
     greeting: 'स्वागत है',
     total_reports: 'कुल रिपोर्ट',
@@ -127,7 +148,9 @@ const translations = {
     step3_full: 'चरण 3: समस्या का विवरण',
     describe_placeholder: 'समस्या का विस्तार से वर्णन करें...',
     listening: 'सुन रहे हैं...',
-    voice_to_text: 'आवाज से लिखें',
+  voice_to_text: 'आवाज से लिखें',
+  voice_to_text_placeholder: 'यहां अपनी समस्या बोलें या लिखें...',
+  voice_to_text_example: 'मेरे घर के पास टूटी पाइप से सड़क पर पानी भर गया है',
     header: 'नागरिक समस्या रिपोर्ट करें',
 
     // TrackStatus
