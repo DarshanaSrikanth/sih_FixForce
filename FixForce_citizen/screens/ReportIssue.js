@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import LanguageToggle from '../components/LanguageToggle';
+import { useLanguage } from '../LanguageContext';
 
 // For demonstration: Random location generator
 const mockLocation = () => ({
@@ -30,9 +32,11 @@ const categories = [
   { key: 'Other', icon: 'alert-circle', color: '#BA68C8' },
 ];
 
-const stepTitles = ['Capture Issue', 'Categorize Issue', 'Describe Issue'];
+
 
 const ReportIssue = ({ onNavigate, onSubmitReport }) => {
+  const { t } = useLanguage();
+  const stepTitles = [t('step1'), t('step2'), t('step3')];
   // Step state
   const [step, setStep] = useState(0);
 
@@ -130,7 +134,7 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
         // Step 1: Camera + GPS
         return (
           <Animated.View style={[styles.stepContent, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
-            <Text style={styles.stepTitle}>Step 1: Capture Issue</Text>
+            <Text style={styles.stepTitle}>{t('step1')}</Text>
             <TouchableOpacity
               style={[styles.photoButton, photoTaken && styles.photoTaken]}
               onPress={handlePhotoCapture}
@@ -139,12 +143,12 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
               {photoTaken ? (
                 <>
                   <Ionicons name="checkmark-circle" size={42} color="#4A90E2" />
-                  <Text style={styles.photoTakenText}>Photo Captured</Text>
+                  <Text style={styles.photoTakenText}>{t('photo_captured')}</Text>
                 </>
               ) : (
                 <>
                   <Ionicons name="camera" size={42} color="#7FB3D3" />
-                  <Text style={styles.photoButtonText}>Tap to Capture Photo</Text>
+                  <Text style={styles.photoButtonText}>{t('tap_to_capture')}</Text>
                 </>
               )}
             </TouchableOpacity>
@@ -157,7 +161,7 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
             <View style={styles.stepActions}>
               {photoTaken ? (
                 <TouchableOpacity style={styles.nextBtn} onPress={nextStep}>
-                  <Text style={styles.nextBtnText}>Next: Categorize</Text>
+                  <Text style={styles.nextBtnText}>{t('next_categorize')}</Text>
                   <Ionicons name="arrow-forward" size={18} color="white" />
                 </TouchableOpacity>
               ) : null}
@@ -168,7 +172,7 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
         // Step 2: Category Grid
         return (
           <Animated.View style={[styles.stepContent, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
-            <Text style={styles.stepTitle}>Step 2: Categorize Issue</Text>
+            <Text style={styles.stepTitle}>{t('step2_full')}</Text>
             <View style={styles.categoryGrid}>
               {categories.map(cat => (
                 <TouchableOpacity
@@ -183,7 +187,7 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
                   <View style={[styles.categoryIcon, { backgroundColor: cat.color }]}>
                     <Ionicons name={cat.icon} size={24} color="white" />
                   </View>
-                  <Text style={styles.categoryLabel}>{cat.key}</Text>
+                  <Text style={styles.categoryLabel}>{t(cat.key.toLowerCase().replace(/ /g, '_')) || cat.key}</Text>
                   {selectedCategory === cat.key && (
                     <Ionicons name="checkmark" size={20} color={cat.color} style={styles.checkIcon} />
                   )}
@@ -197,7 +201,7 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
               </TouchableOpacity>
               {selectedCategory && (
                 <TouchableOpacity style={styles.nextBtn} onPress={nextStep}>
-                  <Text style={styles.nextBtnText}>Next: Describe</Text>
+                  <Text style={styles.nextBtnText}>{t('next_describe')}</Text>
                   <Ionicons name="arrow-forward" size={18} color="white" />
                 </TouchableOpacity>
               )}
@@ -208,7 +212,7 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
         // Step 3: Description + Voice
         return (
           <Animated.View style={[styles.stepContent, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
-            <Text style={styles.stepTitle}>Step 3: Describe Issue</Text>
+            <Text style={styles.stepTitle}>{t('step3_full')}</Text>
             <View style={styles.descriptionContainer}>
               <TextInput
                 ref={descriptionRef}
@@ -218,7 +222,7 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
                 multiline
                 numberOfLines={3}
                 maxLength={200}
-                placeholder="Describe the issue in detail..."
+                placeholder={t('describe_placeholder')}
                 placeholderTextColor="#95A5A6"
               />
               <TouchableOpacity
@@ -232,7 +236,7 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
               >
                 <Ionicons name="mic" size={22} color="#4A90E2" />
                 <Text style={styles.voiceBtnText}>
-                  {voiceActive ? "Listening..." : "Voice to Text"}
+                  {voiceActive ? t('listening') : t('voice_to_text')}
                 </Text>
                 {voiceActive && <View style={styles.recordIndicator} />}
               </TouchableOpacity>
@@ -240,11 +244,11 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
             <View style={styles.stepActions}>
               <TouchableOpacity style={styles.prevBtn} onPress={prevStep}>
                 <Ionicons name="arrow-back" size={16} color="#4A90E2" />
-                <Text style={styles.prevBtnText}>Back</Text>
+                <Text style={styles.prevBtnText}>{t('back')}</Text>
               </TouchableOpacity>
               {description.trim().length > 7 && (
                 <TouchableOpacity style={styles.nextBtn} onPress={handleSubmit}>
-                  <Text style={styles.nextBtnText}>Submit Issue</Text>
+                  <Text style={styles.nextBtnText}>{t('submit_issue')}</Text>
                   <Ionicons name="checkmark" size={19} color="white" />
                 </TouchableOpacity>
               )}
@@ -301,6 +305,9 @@ const ReportIssue = ({ onNavigate, onSubmitReport }) => {
 
   return (
     <SafeAreaView style={styles.container} edges={['top', 'left', 'right']}>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', padding: 12 }}>
+        <LanguageToggle />
+      </View>
       <View style={styles.header}>
         <TouchableOpacity style={styles.backBtn} onPress={() => onNavigate('dashboard')}>
           <Ionicons name="arrow-back" size={22} color="#4A90E2" />

@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import LanguageToggle from '../components/LanguageToggle';
+import { useLanguage } from '../LanguageContext';
 
 // Timeline definitions
 const TIMELINE_STEPS = [
@@ -99,20 +101,24 @@ const TrackStatus = ({
     ]).start();
   }, []);
 
+  const { t } = useLanguage();
   if (!selectedReport) {
     // Fallback/no data
     return (
       <SafeAreaView style={styles.container}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', padding: 12 }}>
+          <LanguageToggle />
+        </View>
         <View style={styles.header}>
           <TouchableOpacity onPress={() => onNavigate('dashboard')} style={styles.backBtn}>
             <Ionicons name="arrow-back" size={22} color="#4A90E2"/>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Track Status</Text>
+    <Text style={styles.headerTitle}>{t('track_status')}</Text>
         </View>
         <View style={styles.noDataWrap}>
           <Ionicons name="alert-circle" size={55} color="#BDC3C7" />
           <Text style={styles.noDataText}>
-            No issue selected. Go back to Dashboard and pick a report to track its status.
+            {t('no_issue_selected')}
           </Text>
         </View>
       </SafeAreaView>
@@ -152,11 +158,14 @@ const TrackStatus = ({
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', padding: 12 }}>
+        <LanguageToggle />
+      </View>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => onNavigate('dashboard')} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={22} color="#4A90E2"/>
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Track Issue Status</Text>
+  <Text style={styles.headerTitle}>{t('track_issue_status')}</Text>
       </View>
       <ScrollView style={styles.scrollView}>
         <Animated.View style={[
@@ -179,20 +188,20 @@ const TrackStatus = ({
               />
             </View>
             <View style={styles.issueInfo}>
-              <Text style={styles.issueType}>{selectedReport.type}</Text>
+              <Text style={styles.issueType}>{t(selectedReport.type?.toLowerCase().replace(/ /g, '_')) || selectedReport.type}</Text>
               <View style={styles.issueMetaRow}>
                 <View style={[styles.statusBadge, {backgroundColor: mainColor}]}>
-                  <Text style={styles.statusBadgeText}>{selectedReport.status}</Text>
+                  <Text style={styles.statusBadgeText}>{t('status_' + selectedReport.status?.toLowerCase().replace(/ /g, '_')) || selectedReport.status}</Text>
                 </View>
                 <View style={[
                   styles.priorityBadge,
                   { borderColor: PRIORITY_COLORS[selectedReport.priority] }
                 ]}>
-                  <Text style={[
+                  <Text style={[ 
                     styles.priorityBadgeText,
                     { color: PRIORITY_COLORS[selectedReport.priority] }
                   ]}>
-                    {selectedReport.priority}
+                    {t('priority_' + selectedReport.priority?.toLowerCase()) || selectedReport.priority}
                   </Text>
                 </View>
               </View>
@@ -216,7 +225,7 @@ const TrackStatus = ({
         {/* Progress Bar */}
         <View style={styles.progressWrap}>
           <View style={styles.progressHead}>
-            <Text style={styles.progressText}>Progress</Text>
+            <Text style={styles.progressText}>{t('progress') || 'Progress'}</Text>
             <Text style={styles.progressPct}>{progressValue}%</Text>
           </View>
           <View style={styles.progressBarBg}>
@@ -229,7 +238,7 @@ const TrackStatus = ({
 
         {/* Timeline Section */}
         <View style={styles.timelineWrap}>
-          <Text style={styles.timelineTitle}>Status Timeline</Text>
+          <Text style={styles.timelineTitle}>{t('status_timeline') || 'Status Timeline'}</Text>
           {timelineSteps.map((step, idx) => (
             <View key={step.key} style={styles.timelineStepRow}>
               <View style={styles.timelineIconColumn}>
@@ -247,13 +256,13 @@ const TrackStatus = ({
                 )}
               </View>
               <View style={styles.timelineTextColumn}>
-                <Text style={[
+                <Text style={[ 
                   styles.timelineStepLabel,
                   step.active && { color: step.color }
                 ]}>
-                  {step.key}
+                  {t('status_' + step.key?.toLowerCase().replace(/ /g, '_')) || step.key}
                 </Text>
-                <Text style={styles.timelineStepDesc}>{step.desc}</Text>
+                <Text style={styles.timelineStepDesc}>{t('desc_' + step.key?.toLowerCase().replace(/ /g, '_')) || step.desc}</Text>
                 {step.timestamp && (
                   <Text style={styles.timelineTimestamp}>
                     {step.timestamp}
@@ -266,17 +275,17 @@ const TrackStatus = ({
 
         {/* Team Assignment */}
         <View style={styles.teamCard}>
-          <Text style={styles.teamTitle}>Team Assignment</Text>
+          <Text style={styles.teamTitle}>{t('assigned_team')}</Text>
           <Text style={styles.teamName}>{assignedTeam}</Text>
-          <Text style={styles.teamRole}>Specialization: {teamSpecialization}</Text>
+          <Text style={styles.teamRole}>{t('team_specialization')}: {teamSpecialization}</Text>
           <View style={styles.teamActionsRow}>
             <TouchableOpacity style={styles.teamActionBtn}>
               <Ionicons name="call" size={16} color="#4A90E2"/>
-              <Text style={styles.actionBtnText}>Contact</Text>
+              <Text style={styles.actionBtnText}>{t('contact') || 'Contact'}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.teamActionBtn}>
               <Ionicons name="refresh" size={16} color="#4A90E2"/>
-              <Text style={styles.actionBtnText}>Request Update</Text>
+              <Text style={styles.actionBtnText}>{t('request_update') || 'Request Update'}</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -284,7 +293,7 @@ const TrackStatus = ({
         {/* Feedback Section (if completed) */}
         {selectedReport.status === 'Completed' && (
           <View style={styles.feedbackSection}>
-            <Text style={styles.feedbackPrompt}>Rate the Service</Text>
+            <Text style={styles.feedbackPrompt}>{t('rate_service') || 'Rate the Service'}</Text>
             <View style={styles.ratingRow}>
               {[1,2,3,4,5].map(val => (
                 <TouchableOpacity
@@ -303,7 +312,7 @@ const TrackStatus = ({
             </View>
             {feedbackGiven && (
               <Text style={styles.feedbackThanks}>
-                Thanks for your feedback!
+                {t('thanks_feedback') || 'Thanks for your feedback!'}
               </Text>
             )}
           </View>

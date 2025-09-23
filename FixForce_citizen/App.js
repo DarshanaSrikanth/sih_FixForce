@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { LanguageProvider } from './LanguageContext';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
@@ -8,7 +9,7 @@ import Dashboard from './screens/Dashboard';
 import ReportIssue from './screens/ReportIssue';
 import TrackStatus from './screens/TrackStatus';
 
-export default function App() {
+function MainApp() {
   // State management for navigation
   const [currentScreen, setCurrentScreen] = useState('home');
   const [selectedReport, setSelectedReport] = useState(null);
@@ -98,5 +99,13 @@ export default function App() {
       <StatusBar style="dark" backgroundColor="#F8FAFB" />
       {renderScreen()}
     </SafeAreaProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <MainApp />
+    </LanguageProvider>
   );
 }
